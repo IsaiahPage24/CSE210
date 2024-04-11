@@ -26,10 +26,18 @@ public class NoteStorage
     {
         if (File.Exists(_filePath))
         {
-            // Read from file
-            string json = File.ReadAllText(_filePath);
-            // Deserialize into list of note classes
-            return JsonSerializer.Deserialize<List<Note>>(json);
+            try
+            {
+                // Read from file
+                string json = File.ReadAllText(_filePath);
+                // Deserialize into list of note classes
+                return JsonSerializer.Deserialize<List<Note>>(json);
+            }
+            catch (JsonException)
+            {
+                List<Note> new_list = new List<Note>();
+                return new_list;
+            }
         }
         else
         {
