@@ -45,7 +45,7 @@ public class NoteManager
     public NoteManager()
     {
         // instantiate storage and load note list from json
-        NoteStorage storage = new NoteStorage("note_management.cs");
+        NoteStorage storage = new NoteStorage("notes.json");
         _list_of_notes = storage.LoadNotes();
     }
 
@@ -59,8 +59,27 @@ public class NoteManager
         return _list_of_notes;
     }
 
-    public void GetNote(string title)
+    public Note DisplayOneNote(string title)
     {
-        return;
+        Note note = new TextNote("Sorry", "A note by that title does not exist");
+        
+        foreach (Note note1 in _list_of_notes)
+        {
+            if (title == note1.GetTitle())
+            {
+                note = note1;
+            }
+        }
+
+        note.Display();
+        return note;
+    }
+
+    public void DisplayAllNotes()
+    {
+        foreach (Note note in _list_of_notes)
+        {
+            note.Display();
+        }
     }
 }

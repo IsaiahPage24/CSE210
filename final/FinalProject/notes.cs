@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Net.Mime;
 
 public abstract class Note
@@ -6,9 +10,13 @@ public abstract class Note
     protected string _title;
 
     public abstract void Display();
+    public string GetTitle()
+    {
+        return _title;
+    }
 }
 
-public class TextNote : Note
+public class TextNote : Note, ISerializable
 {
     private string _content;
 
@@ -22,6 +30,13 @@ public class TextNote : Note
         Console.WriteLine(_title);
         Console.WriteLine(_content);
     }
+
+    protected TextNote(SerializationInfo info, StreamingContext context)
+    {
+        _title = info.GetString("Title");
+        _content = info.GetString("Content");
+    }
+
     public void EditContent(string edited_content)
     {
         _content = edited_content;
@@ -30,6 +45,12 @@ public class TextNote : Note
     public void EditTitle(string new_title)
     {
         _title = new_title;
+    }
+
+    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue("Title", _title);
+        info.AddValue("Content", _content);
     }
 }
 
